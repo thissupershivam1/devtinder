@@ -1,9 +1,13 @@
 const express = require("express");
 const app = express();
+const auth = require("./middleware/auth");
 
-app.get("/", (req, res) => {
+app.get("/", auth, (req, res) => {
     res.send("Hello from Express Server!");
 });
+// app.get("/", (req, res) => {
+//     res.send("Hello from Express Server!");
+// });
 
 app.get("/test", (req, res) => {
     res.send("Hello from test Express Server!");
