@@ -35,16 +35,11 @@ const userSchema = new mongoose.Schema({
     gender: {
         type: String,
         enum: ["Male", "Female", "Other"],
-        required: true,
+        
     },
     skills: {
         type: [String], // Array of strings
-        validate: {
-            validator: function (v) {
-                return v.length > 0;
-            },
-            message: "Skills array must contain at least one skill",
-        },
+        
     },
 }, { 
     timestamps: true // Adds createdAt and updatedAt fields
