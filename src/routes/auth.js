@@ -77,4 +77,16 @@ authrouter.post("/login", async (req, res) => {
     }
 });
 
+authrouter.post("/logout",  async (req, res) => {
+    try {
+        res.cookie("token",null,{
+            expires: new Date(Date.now())
+        });
+        return res.status(200).json({ message: "Logout successful" });
+    } catch (err) {
+        console.error("Error during user logout:", err);
+        return res.status(500).json({ error: "Internal server error. Please try again later." });
+    }
+});
+
 module.exports=authrouter;
