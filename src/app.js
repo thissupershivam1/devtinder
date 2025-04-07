@@ -4,6 +4,7 @@ const connectDB = require("./config/database");
 const authrouter = require("./routes/auth");
 const profileRouter = require("./routes/profile");
 const requestRouter = require("./routes/request");
+const userRouter = require("./routes/user");
 
 const validator = require("validator");
 const cookieParser = require("cookie-parser");
@@ -17,6 +18,7 @@ app.use(cookieParser());
 app.use("/", authrouter);
 app.use("/", profileRouter);
 app.use("/", requestRouter);
+app.use("/", userRouter);
 
 connectDB()
   .then(() => {
