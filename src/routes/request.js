@@ -49,7 +49,6 @@ requestRouter.post("/request/send/:status/:toUserId", userauth, async (req, res)
         console.error("Error sending connection request:", error);
         return res.status(500).json({ error: "Internal server error. Please try again later." });
     }
-    return res.status(200).json({ message: "Connection request sent successfully"});
 });
 
 requestRouter.post("/request/review/:status/:requestId",userauth, async (req, res) => {

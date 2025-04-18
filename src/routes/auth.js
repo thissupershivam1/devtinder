@@ -28,9 +28,14 @@ authrouter.post("/signup", async (req, res) => {
             password: passwordHash
         });
 
-        // Save user to the database
-        await user.save();
-        return res.status(201).json({ message: "User created successfully" });
+        const savedUser = await user.save();
+        const token = await savedUser.getJWT();
+
+        res.cookie("token", token, {
+            expires: new Date(Date.now() + 8 * 3600000),
+          });
+
+        return res.status(200).json( { user: savedUser } );
 
     } catch (err) {
         console.error("Error during user signup:", err);
@@ -40,36 +45,23 @@ authrouter.post("/signup", async (req, res) => {
 
 authrouter.post("/login", async (req, res) => {
     try {
-        // Input validation
         const { email, password } = req.body;
         validateLoginData(req.body);
 
-        // Check if user exists
         const user = await User.findOne({ email });
         if (!user) {
             return res.status(400).json({ error: "Invalid email or password" });
         }
 
-        // Compare passwords
-        const isMatch =  bcrypt.compareSync(password, user.password);
+        const isMatch = bcrypt.compareSync(password, user.password);
         if (!isMatch) {
             return res.status(400).json({ error: "Invalid email or password" });
         }
 
-        if (isMatch) {
-            // Create a JWT token
-            const token = await user.getJWT();
-            console.log("Generated Token:", token);
-          
-            // Add token to cookies and ensure it's properly set
-            res.cookie("token", token, { httpOnly: true, secure: false });
-            return res.status(200).json({ message: "Login successful" });
-          }
-          
-        
-
-        // Authentication successful, return a response (JWT token can be added here later)
-        return res.status(200).json({ message: "Login successful" });
+        // This is the only response needed
+        const token = await user.getJWT();
+        res.cookie("token", token, { httpOnly: true, secure: false, sameSite: "lax" });
+        return res.status(200).json({ user });
 
     } catch (err) {
         console.error("Error during user login:", err);
@@ -79,8 +71,11 @@ authrouter.post("/login", async (req, res) => {
 
 authrouter.post("/logout",  async (req, res) => {
     try {
-        res.cookie("token",null,{
-            expires: new Date(Date.now())
+        res.cookie("token", "", {
+          httpOnly: true,
+          secure: false,
+          sameSite: "lax",
+          expires: new Date(0), // Or use `maxAge: 0`
         });
         return res.status(200).json({ message: "Logout successful" });
     } catch (err) {

@@ -5,11 +5,15 @@ const authrouter = require("./routes/auth");
 const profileRouter = require("./routes/profile");
 const requestRouter = require("./routes/request");
 const userRouter = require("./routes/user");
-
+const cors=require("cors")
 const validator = require("validator");
 const cookieParser = require("cookie-parser");
 
 // ✅ Move middleware before routes
+app.use(cors({
+  origin:"http://localhost:5173",
+  credentials:true
+}));
 app.use(express.json());  // Parses incoming JSON requests
 app.use(express.urlencoded({ extended: true })); // Parses URL-encoded data
 app.use(cookieParser());
