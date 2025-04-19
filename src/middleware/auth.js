@@ -9,7 +9,7 @@ const userauth = async(req, res, next) => {
     return res.status(401).json({ error: "Unauthorized: No token provided" });
   }
   try {
-    const decoded = jwt.verify(token, "secret");
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
     const { _id } = decoded;
 const user = await User.findById(_id);
 if (!user) {

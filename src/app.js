@@ -1,3 +1,4 @@
+require("dotenv").config();
 const express = require("express");
 const app = express();
 const connectDB = require("./config/database");
@@ -10,6 +11,7 @@ const cors=require("cors")
 const cookieParser = require("cookie-parser");
 const http = require("http");
 const chatRouter = require("./routes/chat");
+
 
 // ✅ Move middleware before routes
 app.use(cors({
