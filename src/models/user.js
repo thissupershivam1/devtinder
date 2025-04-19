@@ -38,6 +38,14 @@ const userSchema = new mongoose.Schema({
         enum: ["Male", "Female", "Other"],
         
     },
+    photoUrl: {
+        type: String,
+        default: "https://geographyandyou.com/images/user-profile.png",
+      },
+      about: {
+        type: String,
+        default: "This is a default about of the user!",
+      },
     skills: {
         type: [String], // Array of strings
         
